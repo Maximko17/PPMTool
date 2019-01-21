@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,5 +41,15 @@ public class ProjectController {
         return new ResponseEntity<>(project,HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public List<Project> findAllProjects(){
+        return projectService.findAllProjects();
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProject(@PathVariable String id) {
+        projectService.deleteProjectById(id.toUpperCase());
+
+        return new ResponseEntity<>("Project with id "+id+" was deleted",HttpStatus.OK);
+    }
 }

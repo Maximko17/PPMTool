@@ -6,6 +6,8 @@ import maxcompany.realcloudapp.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectService {
 
@@ -28,7 +30,20 @@ public class ProjectService {
         if (project==null){
             throw new ProjectIdException("Project with id "+ id + " doesn't exist");
         }
-
         return project;
+    }
+
+    public List<Project> findAllProjects(){
+        return projectRepository.findAll();
+    }
+
+    public void deleteProjectById(String id){
+        Project project = projectRepository.findByProjectIdentifier(id);
+
+        if (project==null){
+            throw new ProjectIdException("Cannot find project with id "+id);
+        }
+
+        projectRepository.delete(project);
     }
 }
