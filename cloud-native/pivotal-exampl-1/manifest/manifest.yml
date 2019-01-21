@@ -1,0 +1,12 @@
+---
+applications:
+- name: bootcamp-customers
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  instances: 1
+  random-route: true
+  path: D:/IdeaProjects/cloud-native/pivotal-exampl-1/target/demo-0.0.1-SNAPSHOT.jar
+  services:
+    - bootcamp-customers-mysql
+  env:
+    DEBUG: "true"
+    SPRING_PROFILES_ACTIVE: cloud
