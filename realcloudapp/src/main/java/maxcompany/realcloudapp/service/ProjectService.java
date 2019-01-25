@@ -1,7 +1,9 @@
 package maxcompany.realcloudapp.service;
 
+import maxcompany.realcloudapp.domain.Backlog;
 import maxcompany.realcloudapp.domain.Project;
 import maxcompany.realcloudapp.exceptions.ProjectIdException;
+import maxcompany.realcloudapp.repository.BacklogRepository;
 import maxcompany.realcloudapp.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,22 @@ public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private BacklogRepository backlogRepository;
 
     public Project saveOrUpdate(Project project){
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            if (project.getId()==null){
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }else {
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+
             return  projectRepository.save(project);
 
         }catch (Exception e){
