@@ -1,7 +1,10 @@
 package maxcompany.realcloudapp.controller;
 
 
+import maxcompany.realcloudapp.domain.Backlog;
 import maxcompany.realcloudapp.domain.ProjectTask;
+import maxcompany.realcloudapp.exceptions.NotFoundException;
+import maxcompany.realcloudapp.repository.BacklogRepository;
 import maxcompany.realcloudapp.service.MapValidationErrorService;
 import maxcompany.realcloudapp.service.ProjectTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +40,34 @@ public class BacklogController {
 
     @GetMapping("/{backlog_id}")
     public ResponseEntity<List<ProjectTask>> getProjectBacklog(@PathVariable String backlog_id){
-
-
         return new ResponseEntity<>(projectTaskService.findBacklogicByID(backlog_id),HttpStatus.OK);
+    }
+
+    @GetMapping("/{backlog_id}/{task_id}")
+    public ResponseEntity<ProjectTask> getProjectBySequence(@PathVariable String backlog_id,@PathVariable String task_id){
+
+        ProjectTask projectTask = projectTaskService.findByProjectIDAndProjectSequence(backlog_id,task_id);
+
+        return new ResponseEntity<>(projectTask,HttpStatus.OK);
+    }
+
+    @PatchMapping("/{backlog_id}/{task_id}")
+    public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask,BindingResult result,
+                                               @PathVariable String backlog_id,@PathVariable String task_id){
+
+        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        ProjectTask updatedTask = projectTaskService.updateProjectTask(projectTask,backlog_id,task_id);
+
+        return new ResponseEntity<>(updatedTask,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{backlog_id}/{task_id}")
+    public ResponseEntity<?> deleteProjectTask(@PathVariable String backlog_id,@PathVariable String task_id){
+
+        projectTaskService.deleteProjectTask(backlog_id,task_id);
+
+        return new ResponseEntity<>("Project Task with ID: '"+ task_id.toUpperCase()+"' was deleted from project with ID: '"+ backlog_id.toUpperCase()+"'",HttpStatus.OK);
     }
 }
