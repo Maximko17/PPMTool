@@ -1,7 +1,11 @@
 package maxcompany.realcloudapp.repository;
 
-import maxcompany.realcloudapp.domain.Project;
+import maxcompany.realcloudapp.domain.ProjectTask;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ProjectTaskRepository extends CrudRepository<Project,Long> {
+import java.util.List;
+
+public interface ProjectTaskRepository extends CrudRepository<ProjectTask,Long> {
+
+    List<ProjectTask> findByProjectIdentifierOrderByPriority(String id);
 }

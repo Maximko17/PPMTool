@@ -1,5 +1,6 @@
 package maxcompany.realcloudapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +36,11 @@ public class ProjectTask {
     private String projectIdentifier;
     private Date create_At;
     private Date update_At;
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "backlog_id",updatable = false,nullable = false)
+    @JsonIgnore
+    private Backlog backlog;
 
     @PrePersist
     protected void onCreate(){
