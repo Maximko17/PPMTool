@@ -1,5 +1,6 @@
 package maxcompany.realcloudapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +31,12 @@ public class ProjectTask {
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date dueDate;
 
     @Column(updatable = false)
     private String projectIdentifier;
+    @Column(updatable = false)
     private Date create_At;
     private Date update_At;
 
